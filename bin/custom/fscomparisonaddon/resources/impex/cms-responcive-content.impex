@@ -1,0 +1,128 @@
+$catalogversion = Staged
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = $catalogversion])[default = $contentCatalog:$catalogversion]
+
+
+#cms-responsive-content
+INSERT_UPDATE ComparisonComponent; $contentCV[unique = true]; uid[unique = true]; name       ; &componentRef; shownProductCount;
+                                 ;                          ; Comparison        ; Comparison ; Comparison   ; 30
+
+UPDATE ComparisonComponent; $contentCV[unique = true]; uid[unique = true]; title[lang = en]
+                          ;                          ; Comparison        ; "Your Comparison Page"
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(uid, $contentCV)
+                         ;                          ; ComparisonSlot    ; Comparison
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'LandingPage2Template']; validComponentTypes(code); compTypeGroup(code)
+                             ; Comparison         ;                                                                           ;                          ; comparison
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]      ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'LandingPage2Template']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-LandingPage2 ; Comparison             ;                                                                               ; ComparisonSlot                             ; true
+
+#mandatory
+INSERT_UPDATE ComponentTypeGroups2ComponentType; source(code)[unique = true]; target(code)[unique = true]
+                                               ; comparison                 ; ComparisonComponent
+
+INSERT_UPDATE ComponentTypeGroup; code[unique = true]
+                                ; comparison
+#add data
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; name       ; active
+                         ;                          ; ComparisonSlot    ; Comparison ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]           ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'BrandLandingPage2Template']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-BrandLandingPage2 ; Comparison             ;                                                                                    ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]        ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-ProductDetails ; Comparison             ;                                                                                     ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]             ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'BasicProductDetailsPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-BasicProductDetails ; Comparison             ;                                                                                          ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]               ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'CollectProductDetailsPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-CollectProductDetails ; Comparison             ;                                                                                            ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]            ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'CollectStoreSearchPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-CollectStoreSearch ; Comparison             ;                                                                                         ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]    ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ASMLandingPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-ASMLanding ; Comparison             ;                                                                                 ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]          ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'BasicStoreSearchPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-BasicStoreSearch ; Comparison             ;                                                                                       ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ProductListPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-ProductListPage ; Comparison             ;                                                                                  ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ProductGridPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-ProductGridPage ; Comparison             ;                                                                                  ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]           ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SearchResultsListPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-SearchResultsList ; Comparison             ;                                                                                        ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]           ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SearchResultsGridPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-SearchResultsGrid ; Comparison             ;                                                                                        ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]            ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SearchResultsEmptyPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-SearchResultsEmpty ; Comparison             ;                                                                                         ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]      ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'CategoryPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-CategoryPage ; Comparison             ;                                                                               ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]      ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ContentPage1Template']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-ContentPage1 ; Comparison             ;                                                                               ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]      ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ContentPage2Template']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-ContentPage2 ; Comparison             ;                                                                               ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-AccountPage ; Comparison             ;                                                                              ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]  ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-CartPage ; Comparison             ;                                                                           ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                      ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'MyAccountLandingPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-MyAccountLandingPageTemplate ; Comparison             ;                                                                                       ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                         ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ConsignmentTrackingPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-ConsignmentTrackingPageTemplate ; Comparison             ;                                                                                          ; ComparisonSlot                             ; true
+
+#INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                       ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ConsignmentStatusPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+#                                    ;                          ; Comparison-ConsignmentStatusPageTemplate ; Comparison             ;                                                                                        ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'LoginPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-LoginPage ; Comparison             ;                                                                            ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]           ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'CheckoutLoginPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-CheckoutLoginPage ; Comparison             ;                                                                                    ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                      ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'MultiStepCheckoutSummaryPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-MultiStepCheckoutSummaryPage ; Comparison             ;                                                                                               ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]               ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'OrderConfirmationPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-OrderConfirmationPage ; Comparison             ;                                                                                        ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'StoreFinderPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-StoreFinderPage ; Comparison             ;                                                                                  ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ErrorPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; Comparison-ErrorPage ; Comparison             ;                                                                            ; ComparisonSlot                             ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'QuickOrderPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ; ; Comparison-QuickOrderPage           ; Comparison               ; ; ComparisonSlot           ; true
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ComparePageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ; ; Comparison-ComparePage           ; Comparison               ; ; ComparisonSlot           ; true
+
+#INSERT_UPDATE SimpleCMSEnrichedComponent; $contentCV[unique = true]; uid[unique = true]; name; cmslink(uid, $contentCV); &componentRef
+#                                        ; ; HeaderHelp ; Header Help ; NeedHelpLink,ContactUsLink,ForumIsSafeLink,SafePaymentsLink,WarrantyLink ; HeaderHelp;
+
+
+#cmscockpit-access-rights.impex
+$START_USERRIGHTS; ; ; ; ; ; ; ; ;
+Type      ; UID             ; MemberOfGroups             ; Password ; Target              ; read ; change ; create ; remove ; change_perm
+UserGroup ; cmsmanagergroup ; cockpitgroup,employeegroup ;          ;                     ;      ;        ;        ;        ;
+          ;                 ;                            ;          ; ComparisonComponent ; +    ; +      ; +      ; +      ; + ;
+
+#projectdata_cmssmartedit.impex
+INSERT_UPDATE ComponentTypeGroups2ComponentType; source(code)[unique = true]; target(code)[unique = true]
+                                               ; comparison                 ; NavigationComponent

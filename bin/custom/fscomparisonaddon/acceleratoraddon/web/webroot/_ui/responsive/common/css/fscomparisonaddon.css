@@ -1,0 +1,65 @@
+.header-link {
+    width: auto;
+    margin: 0 10px;
+    padding-top: 25px;
+    align-items: flex-end;
+    display: flex;
+}
+
+.header-comparison {
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    top: -2px;
+}
+
+.comparison-count {
+    display: block;
+    position: absolute;
+    left: 50%;
+    background: #e42119;
+    border: 0.5px solid #e42119;
+    border-radius: 100%;
+    width: 14px;
+    height: 14px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 9px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-gap: 10px;
+    background-color: #2196F3;
+    padding: 10px;
+}
+
+.grid-container > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid black;
+    text-align: center;
+    font-size: 30px;
+}
+
+.zui-table {
+    border: solid 1px #DDEEEE;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #DDEFEF;
+    border: solid 1px #DDEEEE;
+    color: #336B6B;
+    padding: 10px;
+    text-align: left;
+    text-shadow: 1px 1px 1px #fff;
+}
+.zui-table tbody td {
+    border: solid 1px #DDEEEE;
+    color: #333;
+    padding: 10px;
+    text-shadow: 1px 1px 1px #fff;
+}
+

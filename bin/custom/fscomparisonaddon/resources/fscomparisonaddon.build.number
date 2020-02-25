@@ -1,0 +1,9 @@
+#Ant properties
+#Fri Oct 05 08:34:48 CEST 2018
+builddate=20181005 0832
+description=fscomparisonaddon
+name=fscomparisonaddon
+releasedate=20170803 1323
+vendor=hybris
+version=6.5.0.14
+version.api=6.5.0

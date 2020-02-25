@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<items 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:noNamespaceSchemaLocation="items.xsd">
+
+	<relations>
+		<relation code="Comparison2Product" generate="true" autocreate="true" localized="false">
+			<deployment table="Comparison2Product" typecode="21002"/>
+			<sourceElement type="Comparison" cardinality="many" qualifier="comparison">
+				<modifiers read="true" write="true" search="true" optional="false"/>
+			</sourceElement>
+			<targetElement type="Product" cardinality="many" qualifier="products" collectiontype="set">
+				<modifiers read="true" write="true" search="true" optional="false" />
+			</targetElement>
+		</relation>
+	</relations>
+
+	<itemtypes>
+		<itemtype generate="true"
+				  code="Comparison"
+				  jaloclass="es.fs.fscomparisonaddon.jalo.Comparison"
+				  extends="GenericItem"
+				  autocreate="true"
+		>
+			<deployment table="Comparison" typecode="21001"/>
+			<attributes>
+				<attribute qualifier="user" type="User">
+					<description>User</description>
+					<modifiers initial="true"/>
+					<persistence type="property"/>
+				</attribute>
+
+				<attribute qualifier="sessionId" type="java.lang.String">
+					<description>SessionId</description>
+					<persistence type="property"/>
+				</attribute>
+
+			</attributes>
+			<indexes>
+				<index name="userSessionIDX" unique="true">
+					<key attribute="user" />
+					<key attribute="sessionId"/>
+				</index>
+
+			</indexes>
+		</itemtype>
+
+		<itemtype code="ComparisonComponent" generate="true"
+				  extends="SimpleCMSComponent" autocreate="true"
+				  jaloclass="de.hybris.platform.acceleratorcms.jalo.components.ComparisonComponent">
+			<description>It represents comparison component that can be configured to show some information about comparison content.</description>
+			<attributes>
+				<attribute qualifier="title" type="localized:java.lang.String"
+						   generate="true" autocreate="true">
+					<persistence type="property" />
+					<description>It is localized title of the component.</description>
+				</attribute>
+				<attribute qualifier="shownProductCount" type="int"
+						   generate="true" autocreate="true">
+					<persistence type="property" />
+					<modifiers optional="false" />
+					<defaultvalue>Integer.valueOf(3)</defaultvalue>
+					<description>It controls the maximum number of products to display in the component.</description>
+				</attribute>
+				<attribute qualifier="lightboxBannerComponent" type="SimpleBannerComponent"
+						   generate="true" autocreate="true">
+					<persistence type="property" />
+					<modifiers />
+					<description>It is a banner component that can be displayed in the comparison.</description>
+				</attribute>
+			</attributes>
+		</itemtype>
+	</itemtypes>
+</items>

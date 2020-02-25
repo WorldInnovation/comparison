@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+           
+    <context:annotation-config/> 
+
+	<bean id="fscomparisonaddonCoreDataImportedEventListener" parent="abstractCoreDataImportedEventListener">
+		<property name="supportedChannels">
+			<list value-type="de.hybris.platform.commerceservices.enums.SiteChannel">
+				<value>B2C</value>
+				<!--
+								<value>B2B</value>
+				-->
+			</list>
+		</property>
+		<property name="addonExtensionMetadata">
+			<bean class="de.hybris.platform.addonsupport.data.AddonExtensionMetadata">
+				<property name="suffixChannel" value="false"/>
+				<property name="baseExtensionName" value="fscomparisonaddon"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="fscomparisonaddonSampleDataEventListener" parent="abstractGenericAddOnSampleDataEventListener"  >
+		<property name="extensionName" value="fscomparisonaddon" />
+	</bean>
+
+	<bean id="comparisonDao" class="es.fs.fscomparisonaddon.dao.impl.ComparisonDaoImpl">
+		<property name="flexibleSearchService" ref="flexibleSearchService"/>
+	</bean>
+
+	<bean id="comparisonFactory" class="es.fs.fscomparisonaddon.service.impl.ComparisonFactoryImpl">
+		<property name="modelService" ref="modelService"/>
+	</bean>
+
+	<bean id="comparisonService" class="es.fs.fscomparisonaddon.service.impl.ComparisonServiceImpl">
+		<property name="comparisonFactory" ref="comparisonFactory"/>
+		<property name="sessionService" ref="sessionService"/>
+        <property name="userService" ref="defaultUserService"/>
+		<property name="comparisonDao" ref="comparisonDao"/>
+		<property name="modelService" ref="defaultModelService"/>
+	</bean>
+
+	<bean id="comparisonFacadeImpl" class="es.fs.fscomparisonaddon.facades.impl.ComparisonFacadeImpl">
+		<property name="userService" ref="userService"/>
+		<property name="productService" ref="productService"/>
+		<property name="comparisonProductConverter" ref="comparisonProductConverter"/>
+		<property name="comparisonService" ref="comparisonService"/>
+		<property name="comparisonProductsToCategoryConverter" ref="comparisonProductsToCategoryConverter"/>
+		<property name="comparisonProductSetConverter" ref="comparisonProductSetConverter"/>
+	</bean>
+
+<!--	<bean id="defaultComparisonProductPopulator"
+		  class="es.fs.fscomparisonaddon.facades.populators.impl.DefaultComparisonProductPopulator">
+		<property name="categoryService" ref="categoryService"/>
+		<property name="defaultCommerceCategoryService" ref="defaultCommerceCategoryService"/>
+		<property name="productConverter" ref="productConverter"/>
+	</bean>
+
+	<alias name="defaultComparisonProductConverter" alias="comparisonProductConverter"/>
+	<bean id="defaultComparisonProductConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="es.fs.fscomparisonaddon.facades.dto.ComparisonProductData"/>
+		<property name="populators">
+			<list>
+				<ref bean="categoryPopulator"/>
+				<ref bean="defaultComparisonProductPopulator"/>
+			</list>
+		</property>
+	</bean>-->
+
+	<bean id="comparisonProductPopulator" class="es.fs.fscomparisonaddon.facades.populators.impl.ComparisonProductPopulator"/>
+
+	<bean id="comparisonProductConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.commercefacades.product.data.ProductData"/>
+		<property name="populators">
+			<list>
+				<ref bean="defaultProductUrlPopulator"/>
+				<ref bean="productCategoriesPopulator"/>
+				<ref bean="defaultProductClassificationPopulator"/>
+				<!--<ref bean="productFeatureListPopulator"/>-->
+			</list>
+		</property>
+	</bean>
+
+	<bean name="comparisonCategoryPopulator" class="es.fs.fscomparisonaddon.facades.populators.impl.ComparisonCategoryPopulator">
+		<property name="comparisonProductConverter" ref="comparisonProductConverter"/>
+	</bean>
+	<bean id="comparisonProductsToCategoryConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="es.fs.fscomparisonaddon.facades.dto.ComparisonData"/>
+		<property name="populators">
+			<list>
+				<ref bean="comparisonCategoryPopulator"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="comparisonProductSetPopulator" class="es.fs.fscomparisonaddon.facades.populators.impl.ComparisonProductSetPopulator">
+		<property name="comparisonProductConverter" ref="comparisonProductConverter"/>
+	</bean>
+
+	<bean id="comparisonProductSetConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="java.util.LinkedHashSet"/>
+		<property name="populators">
+			<list>
+				<ref bean="comparisonProductSetPopulator"/>
+			</list>
+		</property>
+	</bean>
+
+
+
+</beans>
