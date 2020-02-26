@@ -21,7 +21,8 @@
                 <span class="comparison-count">${shownProductCount}</span>
             </c:if>
             <span class="header-link-icon">
-                            <img src="/_ui/responsive/common/images/comparison.svg">
+                            <img src="/_ui/addons/fscomparisonaddon/responsive/common/images/comparison.png">
+               <%-- <img src="/_ui/responsive/common/images/comparison.png">--%>
     </span>
 <%-- look on 7
            <div class="${navigationClass} js-${navigationClass} display-none NAVcompONENT" data-title="Compare">

@@ -109,6 +109,10 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		{
 			ComparisonModel comparisonModel = session.getAttribute(SESSION_COMPARISON);
 			Set<ProductModel> deleteProducts = getProductsByCategory(comparisonModel, categoryCode);
+			if (deleteProducts.size() == 0)
+			{//product code here
+				deleteProducts = getProductByCode(comparisonModel, categoryCode);
+			}
 			return removeFromComparisonProducts(comparisonModel, deleteProducts);
 		}
 	}
@@ -174,6 +178,14 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 					return (!CollectionUtils.isEmpty(categoryDataList)) && categoryDataList.get(categoryDataList.size() - 1)
 							.getCode().equals(categoryCode);
 				})
+				.collect(Collectors.toSet());
+	}
+
+	private Set<ProductModel> getProductByCode (ComparisonModel comparisonModel, String productCode)
+	{
+		return comparisonModel.getProducts().stream()
+				.filter(productModel ->
+						productModel.getCode().equals(productCode))
 				.collect(Collectors.toSet());
 	}
 

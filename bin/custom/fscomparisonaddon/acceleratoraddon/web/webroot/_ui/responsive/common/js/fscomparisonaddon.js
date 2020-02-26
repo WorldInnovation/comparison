@@ -3,7 +3,8 @@ ACC.fscomparisonaddon = {
     _autoload: [
         "addProductToComparison",
         "appendComparisonButton",
-        "refreshComparisonList"
+        "refreshComparisonList",
+        "refreshComparisonTable"
     ],
 
     addProductToComparison: function () {
@@ -37,7 +38,7 @@ ACC.fscomparisonaddon = {
             success: function (data) {
                 $("#comparisonComponent").replaceWith(data);
                 ACC.fscomparisonaddon.refreshComparisonList();
-                ACC.fscomparisonaddon.onListenerComparisonCategoryCompare();
+                ACC.fscomparisonaddon.refreshComparisonTable();
             }
         })
 
@@ -67,6 +68,27 @@ ACC.fscomparisonaddon = {
                 })
 
             });
+
+    },
+
+    refreshComparisonTable: function () {
+        $('#comparisonTable').on('click', '.comparisonItemLinkClose' , function () {
+            debugger;
+            const comparisonItemRemove = $(this).data('compare-category-code');
+            const baseUrl = $("#comparisonComponent").data('compare-url-category-delete');
+            $.ajax({
+                url: baseUrl,
+                type: 'POST',
+                data: {
+                    code: comparisonItemRemove
+                },
+                success: function (data) {
+                    ACC.fscomparisonaddon.getComparisonProduct();
+                }
+
+            })
+
+        });
 
     }
 

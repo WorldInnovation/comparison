@@ -11,43 +11,7 @@
 
 <%--<%@ taglib prefix="template" tagdir="/WEB-INF/tags/addons/fscomparisonaddon/responsive/template" %>--%>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/responsive/template"%>
-<%--<style>
-    .grid-container {
-        display: grid;
-        grid-template-columns: auto;
-        grid-gap: 10px;
-        background-color: #2196F3;
-        padding: 10px;
-    }
 
-    .grid-container > div {
-        background-color: rgba(255, 255, 255, 0.8);
-        border: 1px solid black;
-        text-align: center;
-        font-size: 30px;
-    }
-
-    .zui-table {
-        border: solid 1px #DDEEEE;
-        border-collapse: collapse;
-        border-spacing: 0;
-        font: normal 13px Arial, sans-serif;
-    }
-    .zui-table thead th {
-        background-color: #DDEFEF;
-        border: solid 1px #DDEEEE;
-        color: #336B6B;
-        padding: 10px;
-        text-align: left;
-        text-shadow: 1px 1px 1px #fff;
-    }
-    .zui-table tbody td {
-        border: solid 1px #DDEEEE;
-        color: #333;
-        padding: 10px;
-        text-shadow: 1px 1px 1px #fff;
-    }
-</style>--%>
 <template:page pageTitle="Compare">
     <div class="large-11 medium-12 columns product-gallery">
     <div id="comparisonCompare" data-compare-url="${compareUrl}"
@@ -78,15 +42,15 @@
                 <th>CategoryChain</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="comparisonTable">
 
                 <c:forEach var="productData" items="${compare}">
                 <tr>
                     <td>
                         <div data-compare-url="${compareUrl}"
                              data-compare-url-get="${compareUrlGet}" data-compare-url-category-delete="${compareUrlCategoryDelete}"
-                             data-compare-url-category-compare="${compareUrlCategoryCompare}">
-                            <a href="javascript:void(0)" class="comparisonCategoryLinkClose glyphicon glyphicon-remove"
+                             >
+                            <a href="javascript:void(0)" class="comparisonItemLinkClose glyphicon glyphicon-remove"
                                data-compare-category-code=${productData.code}>
                             </a>
                         </div>
