@@ -84,6 +84,7 @@ ACC.fscomparisonaddon = {
                 },
                 success: function (data) {
                     ACC.fscomparisonaddon.getComparisonProduct();
+                    location.reload();
                 }
 
             })

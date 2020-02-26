@@ -14,20 +14,20 @@
 
 <template:page pageTitle="Compare">
     <div class="large-11 medium-12 columns product-gallery">
-    <div id="comparisonCompare" data-compare-url="${compareUrl}"
-         data-compare-url-get="${compareUrlGet}" data-compare-url-category-delete="${compareUrlCategoryDelete}"
-         data-compare-url-category-compare="${compareUrlCategoryCompare}"
+    <div id="comparisonCompare"
          class="js-header-popup no-decoration hover header-link header-comparison">
 
-        <table class="zui-table">
+        <table id="comparisonTable" class="zui-table" data-compare-url="${compareUrl}"
+               data-compare-url-get="${compareUrlGet}" data-compare-url-category-delete="${compareUrlCategoryDelete}"
+               data-compare-url-category-compare="${compareUrlCategoryCompare}">
             <thead>
             <caption>
                 <h4>
                     Compare page
-                    <a href="javascript:void(0);" class="comparisonCategoryLinkClose glyphicon glyphicon-remove"
-                       data-compare-category-code=${comparison.code}>
-                        <spring:theme code="text.address.delete"/>
-                    </a>
+                        <a href="javascript:void(0);" class="comparisonItemLinkClose glyphicon glyphicon-remove"
+                           data-compare-category-code=${categoryCode}>
+                            <spring:theme code="text.address.delete"/>
+                        </a>
                 </h4>
             </caption>
             <tr>
@@ -42,7 +42,7 @@
                 <th>CategoryChain</th>
             </tr>
             </thead>
-            <tbody id="comparisonTable">
+            <tbody >
 
                 <c:forEach var="productData" items="${compare}">
                 <tr>
