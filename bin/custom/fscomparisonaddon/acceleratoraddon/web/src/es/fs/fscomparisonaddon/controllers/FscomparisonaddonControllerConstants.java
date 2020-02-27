@@ -1,6 +1,9 @@
 package es.fs.fscomparisonaddon.controllers;
 
-import de.hybris.platform.acceleratorcms.model.components.ComparisonComponentModel;
+/*import de.hybris.platform.acceleratorcms.model.components.ComparisonComponentModel;*/
+
+import es.fs.fscomparisonaddon.model.components.ComparisonComponentModel;
+
 
 /**
  */

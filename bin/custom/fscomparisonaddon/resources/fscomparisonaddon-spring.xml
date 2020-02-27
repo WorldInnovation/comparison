@@ -63,7 +63,7 @@
 	<bean id="comparisonFacadeImpl" class="es.fs.fscomparisonaddon.facades.impl.ComparisonFacadeImpl">
 		<property name="userService" ref="userService"/>
 		<property name="productService" ref="productService"/>
-		<property name="comparisonProductConverter" ref="comparisonProductConverter"/>
+		<property name="comparisonComponentProductConverter" ref="comparisonComponentProductConverter"/>
 		<property name="comparisonService" ref="comparisonService"/>
 		<property name="comparisonProductsToCategoryConverter" ref="comparisonProductsToCategoryConverter"/>
 		<property name="comparisonProductSetConverter" ref="comparisonProductSetConverter"/>
@@ -96,7 +96,17 @@
 				<ref bean="defaultProductUrlPopulator"/>
 				<ref bean="productCategoriesPopulator"/>
 				<ref bean="defaultProductClassificationPopulator"/>
-				<!--<ref bean="productFeatureListPopulator"/>-->
+				<ref bean="productPrimaryImagePopulator"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="comparisonComponentProductConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.commercefacades.product.data.ProductData"/>
+		<property name="populators">
+			<list>
+			<!--	<ref bean="defaultProductUrlPopulator"/>-->
+				<ref bean="productCategoriesPopulator"/>
 			</list>
 		</property>
 	</bean>

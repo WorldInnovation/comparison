@@ -46,7 +46,7 @@
 
 		<itemtype code="ComparisonComponent" generate="true"
 				  extends="SimpleCMSComponent" autocreate="true"
-				  jaloclass="de.hybris.platform.acceleratorcms.jalo.components.ComparisonComponent">
+				  jaloclass="es.fs.fscomparisonaddon.jalo.components.ComparisonComponent">
 			<description>It represents comparison component that can be configured to show some information about comparison content.</description>
 			<attributes>
 				<attribute qualifier="title" type="localized:java.lang.String"

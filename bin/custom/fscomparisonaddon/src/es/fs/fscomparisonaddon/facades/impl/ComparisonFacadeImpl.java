@@ -22,7 +22,7 @@ public class ComparisonFacadeImpl implements ComparisonFacade
 	private UserService userService;
 	private ProductService productService;
 	private ComparisonService comparisonService;
-	private Converter<ProductModel, ProductData> comparisonProductConverter;
+	private Converter<ProductModel, ProductData> comparisonComponentProductConverter;
 	private Converter<Set<ProductModel>, ComparisonData> comparisonProductsToCategoryConverter;
 	private Converter<Set<ProductModel>, LinkedHashSet<ProductData>> comparisonProductSetConverter;
 
@@ -33,7 +33,7 @@ public class ComparisonFacadeImpl implements ComparisonFacade
 		UserModel userModel = userService.getCurrentUser();
 		ProductModel productModel = productService.getProductForCode(code);
 		comparisonService.add(userModel, productModel);
-		return comparisonProductConverter.convert(productModel);
+		return comparisonComponentProductConverter.convert(productModel);
 
 	}
 
@@ -80,9 +80,9 @@ public class ComparisonFacadeImpl implements ComparisonFacade
 	}
 
 	@Required
-	public void setComparisonProductConverter(Converter<ProductModel, ProductData> comparisonProductConverter)
+	public void setComparisonComponentProductConverter(Converter<ProductModel, ProductData> comparisonComponentProductConverter)
 	{
-		this.comparisonProductConverter = comparisonProductConverter;
+		this.comparisonComponentProductConverter = comparisonComponentProductConverter;
 	}
 
 	@Required
