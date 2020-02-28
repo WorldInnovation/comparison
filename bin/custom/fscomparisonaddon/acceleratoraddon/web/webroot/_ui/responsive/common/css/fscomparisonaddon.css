@@ -51,9 +51,9 @@
 .zui-table thead th {
     background-color: #DDEFEF;
     border: solid 1px #DDEEEE;
-    color: #336B6B;
+    color: #4ab4b4;
     padding: 10px;
-    text-align: left;
+    text-align: right;
     text-shadow: 1px 1px 1px #fff;
 }
 .zui-table tbody td {

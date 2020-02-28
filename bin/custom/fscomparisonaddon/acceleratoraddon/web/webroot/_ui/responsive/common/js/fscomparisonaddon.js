@@ -28,7 +28,7 @@ ACC.fscomparisonaddon = {
         })
 
     },
-
+    /*todo use form post*/
     getComparisonProduct: function () {
         const baseUrlGet = $("#comparisonComponent").data('compare-url-get');
         debugger;

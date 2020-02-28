@@ -16,7 +16,7 @@
     <div id="comparisonCompare"
          class="js-header-popup no-decoration hover header-link header-comparison">
 
-
+        <c:set var="classificationSizeMapping" scope="session" value="${['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19']}"/>
         <table id="comparisonTable" class="zui-table" data-compare-url="${compareUrl}"
         data-compare-url-get="${compareUrlGet}" data-compare-url-category-delete="${compareUrlCategoryDelete}"
         data-compare-url-category-compare="${compareUrlCategoryCompare}">
@@ -25,13 +25,23 @@
                 <c:forEach var="productData" items="${compare}" >
 
                     <td>
-                        <h2><div data-compare-url="${compareUrl}"
-                                 data-compare-url-get="${compareUrlGet}" data-compare-url-category-delete="${compareUrlCategoryDelete}"
-                        >
+                        <h2>
+                            <div data-compare-url="${compareUrl}"
+                                 data-compare-url-get="${compareUrlGet}"
+                                 data-compare-url-category-delete="${compareUrlCategoryDelete}">
                             <a href="javascript:void(0)" class="comparisonItemLinkClose glyphicon glyphicon-remove"
                                data-compare-category-code=${productData.code}>
                             </a>
                         </div>
+                            <div class="owl-item" style="width: 94px;">
+                                <a href="#" class="item">
+                                    <c:forEach var="imageLink" items="${productData.images}" varStatus="status">
+                                        <c:if test="${status.last}">
+                                            <img class="lazyOwl" src="${imageLink.url}">
+                                        </c:if>
+                                    </c:forEach>
+                                </a>
+                            </div>
                             <div>
                                 <c:url value="${productData.url}" var="show"/>
                                 <a class="btn" href="${fn:escapeXml(show)}">
@@ -63,25 +73,38 @@
                 </c:forEach>
             </tr>
 
-            <c:forEach var="productData" items="${compare}">
-
+                <%--th of classification--%>
+            <c:forEach var="productData" items="${compare}" end="0">
                 <c:forEach var="classifications" items="${productData.classifications}">
-                    <c:forEach var="classificationFeature" items="${classifications.features}">
-                        <tr>
-                            <th>${classificationFeature.name}</th>
-                            <td>
-                            <c:forEach var="featureValue" items="${classificationFeature.featureValues}">
-                                <p>
-                                        ${empty featureValue.value ? '-' : featureValue.value}
-                                </p>
-                            </c:forEach>
-                            </td>
-                        </tr>
-                    </c:forEach>
+                        <c:set var="classificationFeatureNames" scope="session"
+                               value="${classifications.features}"/>
                 </c:forEach>
-
             </c:forEach>
+                <%----%>
 
+            <c:forEach var="classificationLine" items="${classificationFeatureNames}">
+                <tr>
+                    <th>${classificationLine.name}</th>
+                <c:forEach var="productData" items="${compare}">
+                    <c:forEach var="classifications" items="${productData.classifications}">
+                        <c:forEach var="classificationFeature" items="${classifications.features}">
+                            <c:if test="${classificationFeature.name == classificationLine.name}">
+                                <td>
+                                    <c:forEach var="featureValue" items="${classificationFeature.featureValues}">
+                                        <p>
+                                                ${empty featureValue.value ? '-' : featureValue.value}
+                                        </p>
+                                    </c:forEach>
+                                </td>
+                            </c:if>
+
+
+                        </c:forEach>
+                    </c:forEach>
+
+                </c:forEach>
+                </tr>
+            </c:forEach>
         </table>
 
  <%--       <table id="comparisonTable" class="zui-table" data-compare-url="${compareUrl}"
