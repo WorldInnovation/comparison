@@ -13,4 +13,5 @@ public interface ComparisonFacade
     ComparisonData getProducts();
     String deleteCategory (String code);
     Set<ProductData> compare (String categoryCode);
+    Set<String> getFeatureNames (Set<ProductData> productDataSet);
 }

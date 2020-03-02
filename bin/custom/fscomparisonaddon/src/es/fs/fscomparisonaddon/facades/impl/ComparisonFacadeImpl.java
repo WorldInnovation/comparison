@@ -11,6 +11,7 @@ import es.fs.fscomparisonaddon.facades.dto.ComparisonData;
 import es.fs.fscomparisonaddon.service.ComparisonService;
 import org.springframework.beans.factory.annotation.Required;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -59,6 +60,16 @@ public class ComparisonFacadeImpl implements ComparisonFacade
 		validateParameterNotNullStandardMessage("categoryCode", categoryCode);
 		UserModel userModel = userService.getCurrentUser();
 		return  comparisonProductSetConverter.convert(comparisonService.compare(userModel, categoryCode));
+	}
+
+	@Override
+	public Set<String> getFeatureNames (Set<ProductData> productDataSet)
+	{
+		Set<String> featuresNames = new HashSet<>();
+		productDataSet.stream().forEach(productData -> productData.getClassifications()
+				.stream().forEach(classificationData -> classificationData.getFeatures()
+						.stream().forEach(featureData -> featuresNames.add(featureData.getName()))));
+		return featuresNames;
 	}
 
 	@Required

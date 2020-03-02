@@ -52,9 +52,11 @@ public class ComparisonController extends AbstractPageController
 	public String compareComparison(final Model model, @PathVariable final String categoryCode)
 			throws CMSItemNotFoundException
 	{
-		Set<ProductData> compare = comparisonFacade.compare(categoryCode);
+		Set<ProductData> comparison = comparisonFacade.compare(categoryCode);
+		Set<String> featureNames = comparisonFacade.getFeatureNames(comparison);
 		model.addAttribute("categoryCode", categoryCode);
-		model.addAttribute("compare", compare);
+		model.addAttribute("comparison", comparison);
+		model.addAttribute("featureNames", featureNames);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(COMPARE_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(COMPARE_CMS_PAGE));
