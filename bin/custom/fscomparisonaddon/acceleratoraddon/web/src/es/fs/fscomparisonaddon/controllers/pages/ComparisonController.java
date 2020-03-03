@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -46,6 +48,13 @@ public class ComparisonController extends AbstractPageController
 	public String deleteComparison(@RequestParam("code") final String categoryCode)
 	{
 		return comparisonFacade.deleteCategory(categoryCode);
+	}
+
+	@RequestMapping(value = "/deleteProduct", method = RequestMethod.POST, params = "productCode")
+	@ResponseBody
+	public String deleteComparisonProduct(@RequestParam("productCode") final String productCode)
+	{
+		return comparisonFacade.deleteProduct(productCode);
 	}
 
 	@RequestMapping(value = "/compare/{categoryCode}", method = RequestMethod.GET)

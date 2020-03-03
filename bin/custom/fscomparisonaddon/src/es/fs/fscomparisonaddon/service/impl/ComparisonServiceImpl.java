@@ -92,16 +92,16 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 	{
 		if (hasSessionComparison())
 		{
-			deleteProductFromSessionComparison(categoryCode);
+			deleteCategoryProductFromSessionComparison(categoryCode);
 		}
 		else
 		{
-			deleteProductFromUserOldSessionComparison(user, categoryCode);
+			deleteCategoryProductFromUserOldSessionComparison(user, categoryCode);
 		}
 		return categoryCode;
 	}
 
-	private ComparisonModel deleteProductFromSessionComparison(String categoryCode)
+	private ComparisonModel deleteCategoryProductFromSessionComparison(String categoryCode)
 	{
 		Session session = sessionService.getCurrentSession();
 
@@ -109,10 +109,6 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		{
 			ComparisonModel comparisonModel = session.getAttribute(SESSION_COMPARISON);
 			Set<ProductModel> deleteProducts = getProductsByCategory(comparisonModel, categoryCode);
-			if (deleteProducts.size() == 0)
-			{//product code here
-				deleteProducts = getProductByCode(comparisonModel, categoryCode);
-			}
 			return removeFromComparisonProducts(comparisonModel, deleteProducts);
 		}
 	}
@@ -129,7 +125,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		return comparisonModel;
 	}
 
-	private ComparisonModel deleteProductFromUserOldSessionComparison(UserModel user, String categoryCode)
+	private ComparisonModel deleteCategoryProductFromUserOldSessionComparison(UserModel user, String categoryCode)
 	{
 		ComparisonModel comparisonModel = new ComparisonModel();
 		if (userService.isAnonymousUser(user))
@@ -137,7 +133,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 			return comparisonModel;
 		}
 		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user.getName());
-		return (userComparisonProducts.isPresent()) ? deleteProductFromSessionComparison(categoryCode) : comparisonModel;
+		return (userComparisonProducts.isPresent()) ? deleteCategoryProductFromSessionComparison(categoryCode) : comparisonModel;
 	}
 
 
@@ -187,6 +183,42 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 				.filter(productModel ->
 						productModel.getCode().equals(productCode))
 				.collect(Collectors.toSet());
+	}
+
+	@Override
+	public String deleteProduct(UserModel user, String productCode)
+	{
+		if (hasSessionComparison())
+		{
+			deleteProductFromSessionComparison(productCode);
+		}
+		else
+		{
+			deleteProductFromUserOldSessionComparison(user, productCode);
+		}
+		return productCode;
+	}
+
+	private ComparisonModel deleteProductFromSessionComparison(String productCode)
+	{
+		Session session = sessionService.getCurrentSession();
+		synchronized (session)
+		{
+			ComparisonModel comparisonModel = session.getAttribute(SESSION_COMPARISON);
+			Set<ProductModel> deleteProduct = getProductByCode(comparisonModel, productCode);
+			return removeFromComparisonProducts(comparisonModel, deleteProduct);
+		}
+	}
+
+	private ComparisonModel deleteProductFromUserOldSessionComparison(UserModel user, String productCode)
+	{
+		ComparisonModel comparisonModel = new ComparisonModel();
+		if (userService.isAnonymousUser(user))
+		{
+			return comparisonModel;
+		}
+		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user.getName());
+		return (userComparisonProducts.isPresent()) ? deleteProductFromSessionComparison(productCode) : comparisonModel;
 	}
 
 	@Required

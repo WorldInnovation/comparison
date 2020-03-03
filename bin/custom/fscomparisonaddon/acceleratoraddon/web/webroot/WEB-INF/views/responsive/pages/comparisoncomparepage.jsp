@@ -8,6 +8,7 @@
 <c:url value="/comparison/add" var="compareUrl"/>
 <c:url value="/comparison/get" var="compareUrlGet"/>
 <c:url value="/comparison/delete" var="compareUrlCategoryDelete"/>
+<c:url value="/comparison/deleteProduct" var="compareUrlProductDelete"/>
 
 <%--<%@ taglib prefix="template" tagdir="/WEB-INF/tags/addons/fscomparisonaddon/responsive/template" %>--%>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/responsive/template"%>
@@ -18,19 +19,19 @@
 
         <table id="comparisonTable" class="zui-table" data-compare-url="${compareUrl}"
         data-compare-url-get="${compareUrlGet}" data-compare-url-category-delete="${compareUrlCategoryDelete}"
+                data-compare-url-product-delete="${compareUrlProductDelete}"
         data-compare-url-category-compare="${compareUrlCategoryCompare}">
             <c:set var="hasName" scope="session" value="0"/>
             <tr>
                 <th>Items Compare</th>
                 <c:forEach var="productData" items="${comparison}" >
-                    <div id="${productData.code}">
-                    <td>
+                    <td id="${productData.code}">
                         <h2>
                             <div data-compare-url="${compareUrl}"
                                  data-compare-url-get="${compareUrlGet}"
                                  data-compare-url-category-delete="${compareUrlCategoryDelete}">
                             <a href="javascript:void(0)" class="comparisonItemLinkClose glyphicon glyphicon-remove"
-                               data-compare-category-code=${productData.code}>
+                               data-compare-product-code=${productData.code}>
                             </a>
                         </div>
                             <div class="owl-item" style="width: 94px;">
@@ -50,7 +51,6 @@
                             </div>
                         </h2>
                     </td>
-                    </div>
                 </c:forEach>
             </tr>
 
@@ -79,7 +79,7 @@
                     <th>${featureName}</th>
 
                 <c:forEach var="productData" items="${comparison}">
-                    <c:set var="hasFeatureName" scope = "session" value="${0}"/>
+                    <c:set var="hasFeatureName" value="${0}"/>
                     <c:forEach var="classifications" items="${productData.classifications}" varStatus="status">
                             <c:forEach var="classificationFeature" items="${classifications.features}">
 
@@ -90,7 +90,7 @@
                                                     ${featureValue.value}
                                             </p>
                                         </c:forEach>
-                                        <c:set var="hasFeatureName" scope = "session" value="${1}"/>
+                                        <c:set var="hasFeatureName" value="${1}"/>
                                     </td>
                                 </c:if>
 

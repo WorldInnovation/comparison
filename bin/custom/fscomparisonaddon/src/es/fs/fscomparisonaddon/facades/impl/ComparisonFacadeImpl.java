@@ -72,6 +72,15 @@ public class ComparisonFacadeImpl implements ComparisonFacade
 		return featuresNames;
 	}
 
+	@Override
+	public String deleteProduct(String productCode)
+	{
+		validateParameterNotNullStandardMessage("productCode", productCode);
+		UserModel userModel = userService.getCurrentUser();
+		comparisonService.deleteProduct(userModel, productCode);
+		return productCode;
+	}
+
 	@Required
 	public void setUserService(UserService userService)
 	{
