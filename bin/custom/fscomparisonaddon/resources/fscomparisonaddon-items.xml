@@ -57,14 +57,11 @@
 				<attribute qualifier="shownProductCount" type="int"
 						   generate="true" autocreate="true">
 					<persistence type="property" />
-					<modifiers optional="false" />
-					<defaultvalue>Integer.valueOf(3)</defaultvalue>
 					<description>It controls the maximum number of products to display in the component.</description>
 				</attribute>
 				<attribute qualifier="lightboxBannerComponent" type="SimpleBannerComponent"
 						   generate="true" autocreate="true">
 					<persistence type="property" />
-					<modifiers />
 					<description>It is a banner component that can be displayed in the comparison.</description>
 				</attribute>
 			</attributes>

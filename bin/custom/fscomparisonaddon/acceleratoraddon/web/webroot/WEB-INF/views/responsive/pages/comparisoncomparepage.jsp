@@ -23,10 +23,12 @@
         data-compare-url-category-compare="${compareUrlCategoryCompare}">
             <c:set var="hasName" scope="session" value="0"/>
             <tr>
-                <th>Items Compare</th>
+                <th>
+                        ${titleTable}
+                </th>
                 <c:forEach var="productData" items="${comparison}" >
                     <td id="${productData.code}">
-                        <h2>
+                        <h3>
                             <div data-compare-url="${compareUrl}"
                                  data-compare-url-get="${compareUrlGet}"
                                  data-compare-url-category-delete="${compareUrlCategoryDelete}">
@@ -42,38 +44,21 @@
                                         </c:if>
                                     </c:forEach>
                                 </a>
+
                             </div>
-                            <div>
-                                <c:url value="${productData.url}" var="show"/>
-                                <a class="btn" href="${fn:escapeXml(show)}">
-                                    <spring:theme code="review.show.more" />
-                                </a>
-                            </div>
-                        </h2>
+                        </h3>
+                        <div>
+                            <p>${productData.name}</p>
+                            <c:url value="${productData.url}" var="show"/>
+                            <a class="btn" href="${fn:escapeXml(show)}">
+                                <spring:theme code="review.show.more" />
+                            </a>
+                        </div>
                     </td>
                 </c:forEach>
             </tr>
 
-            <tr>
-                <th>Product Name</th>
-                <c:forEach var="productData" items="${comparison}" >
-                    <td>${productData.name}</td>
-                </c:forEach>
-            </tr>
-
-            <tr>
-                <th>Brand Name</th>
-                <c:forEach var="productData" items="${comparison}">
-                    <td>
-                        <c:forEach var="categoryFeature" items="${productData.categories}">
-                            <p>
-                                    ${categoryFeature.name}
-                            </p>
-                        </c:forEach>
-                    </td>
-                </c:forEach>
-            </tr>
-            <c:set var="hasFeatureName" scope = "session" value="${0}"/>
+            <c:set var="hasFeatureName" value="${0}"/>
             <c:forEach var="featureName" items="${featureNames}">
                 <tr>
                     <th>${featureName}</th>
@@ -97,7 +82,7 @@
                             </c:forEach>
                         <c:if test="${status.last}">
                             <c:if test="${hasFeatureName==0}">
-                                <td> - </td>
+                                <td><spring:message code="fscomparisonaddon.page.feature.name.empty"/></td>
                             </c:if>
                         </c:if>
                     </c:forEach>

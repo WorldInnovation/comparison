@@ -38,7 +38,6 @@ ACC.fscomparisonaddon = {
             success: function (data) {
                 $("#comparisonComponent").replaceWith(data);
                 ACC.fscomparisonaddon.refreshComparisonList();
-                ACC.fscomparisonaddon.refreshComparisonTable();
             }
         })
 

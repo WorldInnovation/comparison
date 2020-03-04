@@ -3,7 +3,9 @@ package es.fs.fscomparisonaddon.controllers.pages;
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.product.data.ProductData;
+import de.hybris.platform.servicelayer.i18n.I18NService;
 import es.fs.fscomparisonaddon.facades.ComparisonFacade;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,12 @@ public class ComparisonController extends AbstractPageController
 		return comparisonFacade.add(productCode);
 	}
 
+	@Resource(name = "messageSource")
+	private MessageSource messageSource;
+
+	@Resource(name = "i18nService")
+	private I18NService i18nService;
+
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public String getComparisonData(final HttpServletRequest request, final Model model)
 	{
@@ -66,6 +74,8 @@ public class ComparisonController extends AbstractPageController
 		model.addAttribute("categoryCode", categoryCode);
 		model.addAttribute("comparison", comparison);
 		model.addAttribute("featureNames", featureNames);
+		String titleTable = getMessageSource().getMessage("fscomparisonaddon.page.title.product.comparison", null, getI18nService().getCurrentLocale());
+		model.addAttribute("titleTable", titleTable);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(COMPARE_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(COMPARE_CMS_PAGE));
