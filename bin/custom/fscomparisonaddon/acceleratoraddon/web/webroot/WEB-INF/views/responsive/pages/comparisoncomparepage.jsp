@@ -27,12 +27,12 @@
                         ${titleTable}
                 </th>
                 <c:forEach var="productData" items="${comparison}" >
-                    <td id="${productData.code}">
+                    <td id="comparison-product-column-${productData.code}">
                         <h3>
                             <div data-compare-url="${compareUrl}"
                                  data-compare-url-get="${compareUrlGet}"
                                  data-compare-url-category-delete="${compareUrlCategoryDelete}">
-                            <a href="javascript:void(0)" class="comparisonItemLinkClose glyphicon glyphicon-remove"
+                            <a href="javascript:void(0)" class="comparisonProductDelete glyphicon glyphicon-remove"
                                data-compare-product-code=${productData.code}>
                             </a>
                         </div>

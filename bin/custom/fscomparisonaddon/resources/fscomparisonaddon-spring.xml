@@ -105,8 +105,8 @@
 		<property name="targetClass" value="de.hybris.platform.commercefacades.product.data.ProductData"/>
 		<property name="populators">
 			<list>
-			<!--	<ref bean="defaultProductUrlPopulator"/>-->
 				<ref bean="productCategoriesPopulator"/>
+				<ref bean="productPrimaryImagePopulator"/>
 			</list>
 		</property>
 	</bean>

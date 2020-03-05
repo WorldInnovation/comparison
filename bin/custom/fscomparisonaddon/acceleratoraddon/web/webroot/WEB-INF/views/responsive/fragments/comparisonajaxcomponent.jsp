@@ -3,4 +3,3 @@
 <%@ taglib prefix="cms" uri="http://hybris.com/tld/cmstags"%>
 
       <cms:component uid="${component}"/>
-

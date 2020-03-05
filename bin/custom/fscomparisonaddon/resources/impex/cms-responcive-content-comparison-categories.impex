@@ -1,0 +1,59 @@
+$catalogversion = Staged
+$contentCatalog = electronicsContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = $catalogversion])[default = $contentCatalog:$catalogversion]
+#$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Online])[default = $contentCatalog:Online]
+$addonExtensionName = fscomparisonaddon
+$thisePageTemplate = ComparisonCategoryPageTemplate
+$thisePage = ComparisonCategory
+$frontendTemplateName = addon:/fscomparisonaddon/pages/comparisoncategorypage
+$contentPageUid = comparisonCategory
+#label as below
+$url = /comparison/
+$cmsLinkComponent = ComparisonCategoryLink
+$ProductListSlot = ComparisonCategoryProductListSlot
+
+
+INSERT_UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true] ; name                       ; frontendTemplateName                                 ; restrictedPageTypes(code); active[default = true]
+                          ;                          ; $thisePageTemplate ; Comparison Category Template Name ;$frontendTemplateName  ; ContentPage              ;
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]     ; name                      ; active
+                         ;                          ; $ProductListSlot ; Comparison Category Product List Grid ; true
+
+# Compare List Page Template
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $contentCV)[unique = true][default = $thisePageTemplate]; validComponentTypes(code); compTypeGroup(code)
+                             ; SiteLogo               ;                                                                       ;                          ; logo
+                             ; HeaderLinks            ;                                                                       ;                          ; headerlinks
+                             ; SearchBox              ;                                                                       ;                          ; searchbox
+                             ; MiniCart               ;                                                                       ;                          ; minicart
+                             ; NavigationBar          ;                                                                       ;                          ; navigation
+                             ; $ProductListSlot ;                                                                       ;                          ; wide
+                             ; Footer                 ;                                                                       ;                          ; footer
+                             ; TopHeaderSlot          ;                                                                       ;                          ; wide
+                             ; BottomHeaderSlot       ;                                                                       ;                          ; wide
+                             ; PlaceholderContentSlot ;                                                                       ;                          ;
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                        ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = $thisePageTemplate]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; $ProductListSlot-CompareResultsGrid ; $ProductListSlot ;                                                                           ; CompareProductListSlot                     ; true
+
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name         ; masterTemplate(uid, $contentCV); label; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false'];
+                         ;                          ; $contentPageUid           ; Comparison Category Page ; $thisePageTemplate             ; $contentPageUid
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = $thisePageTemplate]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ;                          ; SiteLogo-$thisePage               ; SiteLogo               ; $thisePageTemplate                                                        ; SiteLogoSlot                               ; true
+                                    ;                          ; HomepageLink-$thisePage           ; HomepageNavLink        ; $thisePageTemplate                                                        ; HomepageNavLinkSlot                        ; true
+                                    ;                          ; MiniCart-$thisePage               ; MiniCart               ; $thisePageTemplate                                                        ; MiniCartSlot                               ; true
+                                    ;                          ; NavigationBar-$thisePage          ; NavigationBar          ; $thisePageTemplate                                                        ; NavigationBarSlot                          ; true
+                                    ;                          ; Footer-$thisePage                 ; Footer                 ; $thisePageTemplate                                                        ; FooterSlot                                 ; true
+                                    ;                          ; HeaderLinks-$thisePage            ; HeaderLinks            ;                                                                           ; HeaderLinksSlot                            ; true
+                                    ;                          ; SearchBox-$thisePage              ; SearchBox              ;                                                                           ; SearchBoxSlot                              ; true
+                                    ;                          ; TopHeaderSlot-$thisePage          ; TopHeaderSlot          ;                                                                           ; TopHeaderSlot                              ; true
+                                    ;                          ; BottomHeaderSlot-$thisePage       ; BottomHeaderSlot       ;                                                                           ; BottomHeaderSlot                           ; true
+                                    ;                          ; CompareProductListSlot-$thisePage ; ComparisonCategoryComponent ;                                                                           ; $ProductListSlot                     ; true
+                                    ;                          ; PlaceholderContentSlot-$thisePage ; PlaceholderContentSlot ;                                                                           ; PlaceholderContentSlot                     ; true
+
+INSERT_UPDATE CategoryPage; $contentCV[unique = true]; uid[unique = true]; name; masterTemplate(uid, $contentCV); defaultPage; approvalStatus(code)[default = 'approved']
+                          ; ; comparisonCategoryProductList ; Comparison Category Product List ; $thisePageTemplate ; false ;
+
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&linkRef;&componentRef;target(code)[default='sameWindow']
+                              ;;$cmsLinkComponent;$cmsLinkComponent;$url;$cmsLinkComponent;$cmsLinkComponent;

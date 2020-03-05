@@ -3,8 +3,9 @@ ACC.fscomparisonaddon = {
     _autoload: [
         "addProductToComparison",
         "appendComparisonButton",
-        "refreshComparisonList",
-        "refreshComparisonTable"
+        "bindListenerToComparisonComponent",
+        "bindListenerToComparePage",
+        "bindListenerToComparisonCategoryPage"
     ],
 
     addProductToComparison: function () {
@@ -37,7 +38,7 @@ ACC.fscomparisonaddon = {
             type: 'GET',
             success: function (data) {
                 $("#comparisonComponent").replaceWith(data);
-                ACC.fscomparisonaddon.refreshComparisonList();
+                ACC.fscomparisonaddon.bindListenerToComparisonComponent();
             }
         })
 
@@ -49,7 +50,7 @@ ACC.fscomparisonaddon = {
 
     },
 
-    refreshComparisonList: function () {
+    bindListenerToComparisonComponent: function () {
             $('#comparisonComponent').on('click', '.comparisonCategoryLinkClose' , function () {
                 debugger;
                 const comparisonCategoryRemove = $(this).data('compare-category-code');
@@ -70,13 +71,13 @@ ACC.fscomparisonaddon = {
 
     },
 
-    refreshComparisonTable: function () {
-        $('#comparisonTable td').on('click', '.comparisonItemLinkClose' , function () {
+    bindListenerToComparePage: function () {
+        $('#comparisonTable td').on('click', '.comparisonProductDelete' , function () {
             debugger;
             const comparisonProductRemove = $(this).data('compare-product-code');
             const baseUrl = $("#comparisonTable").data('compare-url-product-delete');
-            const idProductRemove = '#'.concat(comparisonProductRemove);
-            const columnNumber = $(idProductRemove).index() - 1;
+            const idProductRemove = '#' + 'comparison-product-column-' +  comparisonProductRemove;
+            const tableColumnId = $(idProductRemove).index() - 1;
 
             $.ajax({
                 url: baseUrl,
@@ -85,7 +86,7 @@ ACC.fscomparisonaddon = {
                     productCode: comparisonProductRemove
                 },
                 success: function (data) {
-                    ACC.fscomparisonaddon.deleteColumnTable(columnNumber);
+                    ACC.fscomparisonaddon.deleteColumnTable(idProductRemove,tableColumnId);
                     ACC.fscomparisonaddon.getComparisonProduct();
                 }
 
@@ -95,13 +96,35 @@ ACC.fscomparisonaddon = {
 
     },
 
-    deleteColumnTable: function (columnNumber) {
-        const tdDelete = "td:eq";
-        const column = "(" + columnNumber + ")";
-        const trDelete = ",tr:eq";
-        const res = tdDelete.concat(column, trDelete, column);
+    deleteColumnTable: function (idProductRemove, tableColumnId) {
+         const res = 'td:eq(' + tableColumnId + '),tr:eq(' + tableColumnId + ')';
         $('#comparisonTable tr').find(res).remove();
-    }
+    },
+
+    bindListenerToComparisonCategoryPage: function () {
+    $('table td').on('click', '.comparisonProductDelete' , function () {
+        debugger;
+        const comparisonProductRemove = $(this).data('compare-product-code');
+        const baseUrl = $("table").data('compare-url-product-delete');
+        const idProductRemove = '#' + 'comparison-product-column-' +  comparisonProductRemove;
+        const tableColumnId = $(idProductRemove).index() - 1;
+
+        $.ajax({
+            url: baseUrl,
+            type: 'POST',
+            data: {
+                productCode: comparisonProductRemove
+            },
+            success: function (data) {
+                $(idProductRemove).remove();
+                ACC.fscomparisonaddon.getComparisonProduct();
+            }
+
+        })
+
+    });
+
+}
 
     /*   onListenerComparisonCategoryCompare: function () {
         *        $('#comparisonComponent').on('click', '.comparisonCategoryCompare' , function () {

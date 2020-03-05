@@ -113,6 +113,9 @@ INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = tr
 INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ComparePageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
                                     ; ; Comparison-ComparePage           ; Comparison               ; ; ComparisonSlot           ; true
 
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ComparisonCategoryPageTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                                    ; ; Comparison-ComparisonCategoryPage           ; Comparison               ; ; ComparisonSlot           ; true
+
 #INSERT_UPDATE SimpleCMSEnrichedComponent; $contentCV[unique = true]; uid[unique = true]; name; cmslink(uid, $contentCV); &componentRef
 #                                        ; ; HeaderHelp ; Header Help ; NeedHelpLink,ContactUsLink,ForumIsSafeLink,SafePaymentsLink,WarrantyLink ; HeaderHelp;
 
