@@ -51,9 +51,21 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 
 	private ComparisonModel addProductToUserSessionComparison(UserModel user, ProductModel product)
 	{
-		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user.getName());
+		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
 		if (userComparisonProducts.isPresent())
 		{
+			if(userComparisonProducts.get().size() == 0){
+				return addProductToSessionComparison(product);
+			}
+
+			List<ComparisonModel> comparisonModelList = userComparisonProducts.get();
+			//Optional<List<ProductModel>> productModelSet = comparisonDao.getProductsByComparisonPk(comparisonModelList.get(0).getPk().toString());
+			Set<ProductModel> productModelList = comparisonModelList.stream().findFirst().get().getProducts();
+			for (ProductModel productModel: productModelList)
+			{
+				addProductToSessionComparison(productModel);
+			}
+
 			return addProductToSessionComparison(product);
 		}
 		else
@@ -132,7 +144,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		{
 			return comparisonModel;
 		}
-		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user.getName());
+		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
 		return (userComparisonProducts.isPresent()) ? deleteCategoryProductFromSessionComparison(categoryCode) : comparisonModel;
 	}
 
@@ -217,7 +229,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		{
 			return comparisonModel;
 		}
-		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user.getName());
+		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
 		return (userComparisonProducts.isPresent()) ? deleteProductFromSessionComparison(productCode) : comparisonModel;
 	}
 

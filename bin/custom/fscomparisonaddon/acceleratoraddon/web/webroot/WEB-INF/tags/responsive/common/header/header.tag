@@ -86,11 +86,6 @@
                     <cms:pageSlot position="FsClub" var="component">
                         <cms:component component="${component}"/>
                     </cms:pageSlot>
-                    <div id="headerComparison" data-product-code="${productCode}" >
-                        <cms:pageSlot position="Comparison" var="component">
-                            <cms:component component="${component}"/>
-                        </cms:pageSlot>
-                    </div>
                     <div id="headerMiniCartComponent">
                         <cms:pageSlot position="MiniCart" var="cart">
                             <cms:component component="${cart}"/>

@@ -135,6 +135,11 @@
 		</property>
 	</bean>
 
+	<bean id="loginListener" class="es.fs.fscomparisonaddon.events.LoginListener" parent="abstractEventListener">
+		<!--<property name="authenticationSuccessHandler" ref="loginGuidAuthenticationSuccessHandler"/>-->
+
+	</bean>
+
 
 
 </beans>
