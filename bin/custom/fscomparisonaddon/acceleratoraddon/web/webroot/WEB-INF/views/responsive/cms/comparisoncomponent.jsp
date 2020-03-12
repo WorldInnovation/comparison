@@ -17,50 +17,33 @@
              data-compare-url-get="${compareUrlGet}" data-compare-url-category-delete="${compareUrlCategoryDelete}"
              data-compare-url-category-compare="${compareUrlCategoryCompare}"
              class="js-header-popup no-decoration hover header-link header-comparison">
-            <c:if test="${shownProductCount > 0}">
+
+            <div class="dropdown show">
+                <c:if test="${shownProductCount > 0}">
                 <span class="comparison-count">${shownProductCount}</span>
             </c:if>
+                <a class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLinkComparison" data-toggle="dropdown"
+                   href="/comparisonstorefront/electronics/en/comparison/"
+                   aria-haspopup="true" aria-expanded="false">
+                    <img src="${comparisonImage}">
+                </a>
 
-            <div class="cmsImage">
-                <span class="header-link-icon">
-                 <a href="/comparisonstorefront/electronics/en/comparison/"
-                    class="comparisonCategoryCompare">
-
-                            <img src="/_ui/addons/fscomparisonaddon/responsive/common/images/comparison.png">
-
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="btn btn-secondary dropdown-item" role="button" data-toggle="dropdown"
+                       href="/comparisonstorefront/electronics/en/comparison/"
+                       aria-haspopup="true" aria-expanded="false">
+                        <spring:message code="fscomparisonaddon.page.comparison.component"/>
                     </a>
-               </span>
-            </div>
-
-               <%-- <img src="/_ui/responsive/common/images/comparison.png">--%>
-
-<%-- look on 7
-           <div class="${navigationClass} js-${navigationClass} display-none NAVcompONENT" data-title="Compare">
-                <nav class="${navigationClass}__child-wrap display-none">
-                    <c:if test="${not empty component.navigationNode.title }">
-                        <div>
-                            <c:out value="COMPARE"/>
-                        </div>
-                    </c:if>
-                    <div id="headerComparison" data-product-code="${productCode}" >
-                        <cms:pageSlot position="Comparison" var="component">
-                            Compare
-                            <cms:component component="${component}"/>
-                        </cms:pageSlot>
-                    </div>
-                </nav>
-            </div>--%>
-            <div class="popup-header-link" style="top: 60px;">
-
-                <c:forEach var="comparison" items="${comparisonCategories}">
-                    <a href="/comparisonstorefront/electronics/en/comparison/compare/${comparison.code}"
-                       class="comparisonCategoryCompare" data-compare-category-code= ${comparison.code}>
-                            ${comparison.name} (${fn:length(comparison.products)})
-                    </a>
-                    <a href="javascript:void(0);" class="comparisonCategoryLinkClose glyphicon glyphicon-remove"
-                       data-compare-category-code=${comparison.code}>
-                    </a><br>
-                </c:forEach>
+                    <c:forEach var="comparison" items="${comparisonCategories}">
+                        <a href="/comparisonstorefront/electronics/en/comparison/compare/${comparison.code}"
+                           class="comparisonCategoryCompare dropdown-item" data-compare-category-code= ${comparison.code}>
+                                ${comparison.name} (${fn:length(comparison.products)})
+                        </a>
+                        <a href="javascript:void(0);" class="comparisonCategoryLinkClose glyphicon glyphicon-remove dropdown-item"
+                           data-compare-category-code=${comparison.code}>
+                        </a><br>
+                    </c:forEach>
+                </div>
             </div>
         </div>
 

@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping(value = FscomparisonaddonControllerConstants.Actions.Cms.ComparisonComponent)
 public class ComparisonComponentController extends AbstractCMSAddOnComponentController<ComparisonComponentModel>
 {
-
+	public final static String COMPARISON_IMAGE_PATH = "/backoffice/medias/comparison.png?context=bWFzdGVyfHJvb3R8NjkyfGltYWdlL3BuZ3xoYjEvaDJmLzg4MDI2ODA2NjgxOTAucG5nfGYxYTUxMTk1YTUxY2QxNWFlMTIxNTM2YTc0ZjA0YWQ4YTNmOWQ3NmI5M2QxYWUyNjkxY2Q5NTVhYmQ2YWNlZTI";
 	@Resource(name = "comparisonFacadeImpl")
 	private ComparisonFacade comparisonFacade;
 
@@ -36,6 +36,7 @@ public class ComparisonComponentController extends AbstractCMSAddOnComponentCont
 
 		model.addAttribute("shownProductCount", products);
 		model.addAttribute("comparisonCategories", comparisonData.getComparisonCategoriesData());
+		model.addAttribute("comparisonImage", COMPARISON_IMAGE_PATH);
 
 	}
 
