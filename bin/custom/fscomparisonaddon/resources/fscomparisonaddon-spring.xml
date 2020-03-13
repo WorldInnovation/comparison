@@ -136,7 +136,9 @@
 	</bean>
 
 	<bean id="loginListener" class="es.fs.fscomparisonaddon.events.LoginListener" parent="abstractEventListener">
-		<!--<property name="authenticationSuccessHandler" ref="loginGuidAuthenticationSuccessHandler"/>-->
+		<property name="tenantService" ref="defaultTenantService"/>
+		<property name="clusterService" ref="clusterService"/>
+		<property name="comparisonService" ref="comparisonService"/>
 
 	</bean>
 

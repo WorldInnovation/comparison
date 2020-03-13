@@ -1,24 +1,33 @@
 package es.fs.fscomparisonaddon.events;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import de.hybris.platform.servicelayer.event.events.AfterSessionUserChangeEvent;
+import de.hybris.platform.servicelayer.event.impl.AbstractEventListener;
+import es.fs.fscomparisonaddon.service.ComparisonService;
+import es.fs.fscomparisonaddon.service.impl.ComparisonServiceImpl;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
 @Component
-public class LoginListener implements AuthenticationSuccessHandler
+public class LoginListener extends AbstractEventListener<AfterSessionUserChangeEvent>
 {
-
+	private AfterSessionUserChangeEvent afterSessionUserChangeEvent;
+	private ComparisonService comparisonService;
 
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-			Authentication authentication) throws IOException, ServletException
+	protected void onEvent(AfterSessionUserChangeEvent afterSessionUserChangeEvent)
 	{
-		System.out.println(authentication.getName());
+		if (this.afterSessionUserChangeEvent != null)
+		{
+			System.out.println(afterSessionUserChangeEvent.getPreviousUserUID());
+			comparisonService.userChangeComparisonSession();
+		}
+		this.afterSessionUserChangeEvent = afterSessionUserChangeEvent;
+	}
+
+	@Required
+	public void setComparisonService(ComparisonServiceImpl comparisonService)
+	{
+		this.comparisonService = comparisonService;
 	}
 }

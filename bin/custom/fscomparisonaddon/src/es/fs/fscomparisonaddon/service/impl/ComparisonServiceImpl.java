@@ -81,7 +81,24 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		synchronized (session)
 		{
 			ComparisonModel comparisonModel = session.getAttribute(SESSION_COMPARISON);
-			Set<ProductModel> updateProducts = new HashSet<>(comparisonModel.getProducts());
+			Set<ProductModel> updateProducts = new HashSet<>();
+			if(comparisonModel == null)
+			{
+				comparisonModel = new ComparisonModel();
+				Set<ProductModel> productModelSet = new HashSet<>();
+				productModelSet.add(product);
+				comparisonModel.setProducts(productModelSet);
+				comparisonModel.setSessionId(session.getSessionId());
+				comparisonModel.setUser(userService.getCurrentUser());
+				session.setAttribute(SESSION_COMPARISON, comparisonModel);
+			}
+			else
+			{
+				if (comparisonModel.getProducts() != null)
+				{
+					updateProducts = new HashSet<>(comparisonModel.getProducts());
+				}
+			}
 			if (!updateProducts.contains(product))
 			{
 				updateProducts.add(product);
@@ -232,6 +249,57 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
 		return (userComparisonProducts.isPresent()) ? deleteProductFromSessionComparison(productCode) : comparisonModel;
 	}
+
+	@Override
+	public void userChangeComparisonSession()
+	{
+		UserModel user = userService.getCurrentUser();
+		Session session = sessionService.getCurrentSession();
+		Optional<List<ComparisonModel>> currentSessionComparison = comparisonDao.getBySessionId(session.getSessionId());
+		Optional<List<ComparisonModel>> userComparison = comparisonDao.getByUser(user);//getComparison from current user
+
+		if (userComparison.isPresent())
+		{
+			List<ProductModel> userComparisonProducts = new ArrayList<>(getProductsFromOptionalListComparison(userComparison));
+			if (userComparisonProducts.size() != 0)
+			{
+				if (currentSessionComparison.isPresent())
+				{
+					Set<ProductModel> currentSessionComparisonProducts = getProductsFromOptionalListComparison(
+							currentSessionComparison);
+					if (currentSessionComparisonProducts.size() != 0)
+					{
+						userComparisonProducts.removeAll(currentSessionComparisonProducts);
+					}
+				}
+				for (ProductModel productModel : userComparisonProducts)
+				{
+					addProductToSessionComparison(productModel);
+				}
+
+			}
+		}
+				/*		Set<ProductModel> currentSessionComparisonProducts = getProductsFromOptionalListComparison(currentSessionComparison);
+		List<ProductModel> productModelList = new ArrayList<>(getProductsFromOptionalListComparison(userComparison));
+		productModelList.addAll(currentSessionComparisonProducts);
+		Set<ProductModel> userComparisonProducts = new HashSet<>(productModelList);
+		*/
+
+	}
+
+	private Set<ProductModel> getProductsFromOptionalListComparison(Optional<List<ComparisonModel>> optionalListComparison )
+	{
+		Set<ProductModel> productModelSet = new HashSet<>();
+		if (optionalListComparison.isPresent())
+		{
+			if (optionalListComparison.get().size() != 0)
+			{
+				productModelSet = optionalListComparison.get().stream().findFirst().get().getProducts();
+			}
+		}
+		return productModelSet;
+	}
+
 
 	@Required
 	public void setSessionService(SessionService sessionService)

@@ -13,4 +13,5 @@ public interface ComparisonService
     String deleteCategory(UserModel user, String categoryCode);
     Set<ProductModel> compare(UserModel user, String categoryCode);
     String deleteProduct (UserModel user, String productVode);
+    void userChangeComparisonSession ();
 }
