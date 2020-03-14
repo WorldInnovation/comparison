@@ -33,7 +33,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 	{
 		if (hasSessionComparison())
 		{
-			addProductToSessionComparison(product);
+			addProductToSessionComparison(user, product);
 		}
 		else
 		{
@@ -55,7 +55,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		if (userComparisonProducts.isPresent())
 		{
 			if(userComparisonProducts.get().size() == 0){
-				return addProductToSessionComparison(product);
+				return addProductToSessionComparison(user, product);
 			}
 
 			List<ComparisonModel> comparisonModelList = userComparisonProducts.get();
@@ -63,10 +63,10 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 			Set<ProductModel> productModelList = comparisonModelList.stream().findFirst().get().getProducts();
 			for (ProductModel productModel: productModelList)
 			{
-				addProductToSessionComparison(productModel);
+				addProductToSessionComparison(user, productModel);
 			}
 
-			return addProductToSessionComparison(product);
+			return addProductToSessionComparison(user, product);
 		}
 		else
 		{
@@ -74,7 +74,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		}
 	}
 
-	private ComparisonModel addProductToSessionComparison(ProductModel product)
+	private ComparisonModel addProductToSessionComparison(UserModel user, ProductModel product)
 	{
 		Session session = sessionService.getCurrentSession();
 
@@ -252,39 +252,68 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 
 	@Override
 	public void userChangeComparisonSession()
-	{
+	{//todo synchronize
 		UserModel user = userService.getCurrentUser();
 		Session session = sessionService.getCurrentSession();
-		Optional<List<ComparisonModel>> currentSessionComparison = comparisonDao.getBySessionId(session.getSessionId());
-		Optional<List<ComparisonModel>> userComparison = comparisonDao.getByUser(user);//getComparison from current user
+		ComparisonModel comparisonModel = session.getAttribute(SESSION_COMPARISON);
 
-		if (userComparison.isPresent())
-		{
-			List<ProductModel> userComparisonProducts = new ArrayList<>(getProductsFromOptionalListComparison(userComparison));
-			if (userComparisonProducts.size() != 0)
+		Set<ProductModel> anonymousProducts = new HashSet<>();
+		if (comparisonModel != null){
+			if (comparisonModel.getProducts().size() != 0)
 			{
-				if (currentSessionComparison.isPresent())
-				{
-					Set<ProductModel> currentSessionComparisonProducts = getProductsFromOptionalListComparison(
-							currentSessionComparison);
-					if (currentSessionComparisonProducts.size() != 0)
-					{
-						userComparisonProducts.removeAll(currentSessionComparisonProducts);
-					}
-				}
-				for (ProductModel productModel : userComparisonProducts)
-				{
-					addProductToSessionComparison(productModel);
-				}
-
+				anonymousProducts = new HashSet<>(comparisonModel.getProducts()) ;
 			}
 		}
-				/*		Set<ProductModel> currentSessionComparisonProducts = getProductsFromOptionalListComparison(currentSessionComparison);
-		List<ProductModel> productModelList = new ArrayList<>(getProductsFromOptionalListComparison(userComparison));
-		productModelList.addAll(currentSessionComparisonProducts);
-		Set<ProductModel> userComparisonProducts = new HashSet<>(productModelList);
-		*/
 
+		Set<ProductModel> userComparisonProductSet = new HashSet<>();
+				Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
+				if (userComparisonProducts.isPresent())
+				{
+					List<ComparisonModel> userComparisonProductList = userComparisonProducts.get();
+					userComparisonProductSet = (userComparisonProductList.size() == 0)
+							? addUserSessionComparison(user, anonymousProducts)
+							: mergeUserSessionComparison(user, anonymousProducts);
+//todo modelService.save(userSessionComparison);
+				}
+
+
+
+		for (ProductModel productModel : userComparisonProductSet)
+		{
+			addProductToSessionComparison(user, productModel);
+		}
+
+	}
+
+	private Set<ProductModel> addUserSessionComparison (UserModel userModel, Set<ProductModel> productModelSet)
+	{
+		Session session = sessionService.getCurrentSession();
+		ComparisonModel userSessionComparison = new ComparisonModel();
+		userSessionComparison.setProducts(productModelSet);
+		userSessionComparison.setSessionId(session.getSessionId());
+		userSessionComparison.setUser(userService.getCurrentUser());
+		session.setAttribute(userModel.getName(), userSessionComparison);
+		modelService.save(userSessionComparison);//todo remove
+		return new HashSet<>();
+	}
+
+	private Set<ProductModel> mergeUserSessionComparison (UserModel user, Set<ProductModel> anonymousProducts)
+	{
+		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);//todo set by parameters
+		Set<ProductModel> updateProducts = new HashSet<>();
+		if (userComparisonProducts.isPresent())
+		{
+			ComparisonModel comparisonModel = userComparisonProducts.get().get(0);
+			if (comparisonModel != null)
+			{
+				updateProducts = (comparisonModel.getProducts().size() == 0) ? new HashSet<>()
+						: new HashSet<>(comparisonModel.getProducts()) ;
+			}
+
+		}
+
+		updateProducts.removeAll(anonymousProducts);
+		return updateProducts;
 	}
 
 	private Set<ProductModel> getProductsFromOptionalListComparison(Optional<List<ComparisonModel>> optionalListComparison )

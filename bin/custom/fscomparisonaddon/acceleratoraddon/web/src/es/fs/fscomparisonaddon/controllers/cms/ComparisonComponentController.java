@@ -4,7 +4,6 @@ import de.hybris.platform.addonsupport.controllers.cms.AbstractCMSAddOnComponent
 import es.fs.fscomparisonaddon.constants.FscomparisonaddonConstants;
 import es.fs.fscomparisonaddon.controllers.FscomparisonaddonControllerConstants;
 import es.fs.fscomparisonaddon.facades.ComparisonFacade;
-import es.fs.fscomparisonaddon.facades.dto.ComparisonCategoryData;
 import es.fs.fscomparisonaddon.facades.dto.ComparisonData;
 import es.fs.fscomparisonaddon.model.components.ComparisonComponentModel;
 import org.springframework.stereotype.Controller;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Controller("ComparisonComponentController")
