@@ -301,7 +301,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 				productModelSet = getProductsFromUser(user);
 				List<ProductModel> listAdd = new ArrayList<>(productModelSet);
 				listAdd.addAll(anonymousProducts);
-				updateSessionComparison(user, new HashSet<>(listAdd));
+                updateComparisonModel(comparisonModel, session, new HashSet<>(listAdd), user);
 			}
 		}
 	}
