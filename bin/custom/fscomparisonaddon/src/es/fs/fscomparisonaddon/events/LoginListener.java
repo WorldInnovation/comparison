@@ -21,8 +21,7 @@ public class LoginListener extends AbstractEventListener<AfterSessionUserChangeE
 		{
 			if (!this.afterSessionUserChangeEvent.getSource().equals(afterSessionUserChangeEvent.getSource()))
 			{
-				System.out.println(afterSessionUserChangeEvent.getPreviousUserUID());
-				comparisonService.userChangeComparisonSession();
+				comparisonService.userChangeComparisonSession(afterSessionUserChangeEvent.getPreviousUserUID());
 			}
 
 		}

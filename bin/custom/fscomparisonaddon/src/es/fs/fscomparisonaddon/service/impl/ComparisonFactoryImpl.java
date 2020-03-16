@@ -17,10 +17,21 @@ public class ComparisonFactoryImpl implements ComparisonFactory, ComparisonConst
     @Override
     public ComparisonModel createComparison(UserModel user, String sessionId, ProductModel  productModel)
     {
-        ComparisonModel comparisonModel = modelService.create(ComparisonModel.class);
-        comparisonModel.setUser(user);
         Set<ProductModel> productModelSet = new HashSet<>();
         productModelSet.add(productModel);
+        return saveComparison(user, sessionId, productModelSet);
+    }
+
+    @Override
+    public ComparisonModel updateComparison(UserModel user, String sessionId, Set<ProductModel>  productModelSet)
+    {
+        return  saveComparison(user, sessionId, productModelSet);
+    }
+
+    private ComparisonModel saveComparison(UserModel user, String sessionId, Set<ProductModel>  productModelSet)
+    {
+        ComparisonModel comparisonModel = modelService.create(ComparisonModel.class);
+        comparisonModel.setUser(user);
         comparisonModel.setProducts(productModelSet);
         comparisonModel.setSessionId(sessionId);
         modelService.save(comparisonModel);

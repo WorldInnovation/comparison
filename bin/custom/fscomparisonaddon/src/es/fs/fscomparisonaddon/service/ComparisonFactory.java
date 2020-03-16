@@ -9,4 +9,5 @@ import java.util.Set;
 public interface ComparisonFactory
 {
     ComparisonModel createComparison(UserModel user, String sessionId, ProductModel productModelSet);
+    ComparisonModel updateComparison(UserModel user, String sessionId, Set<ProductModel> productModelSet);
 }

@@ -51,27 +51,23 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 
 	private ComparisonModel addProductToUserSessionComparison(UserModel user, ProductModel product)
 	{
-		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
+		Set<ProductModel> productModelSet = getProductsFromUser(user);
+		productModelSet.add(product);
+		return updateSessionComparison(user, productModelSet);
+/*		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
 		if (userComparisonProducts.isPresent())
 		{
 			if(userComparisonProducts.get().size() == 0){
-				return addProductToSessionComparison(user, product);
+				return createSessionComparison(user, product);
 			}
-
 			List<ComparisonModel> comparisonModelList = userComparisonProducts.get();
-			//Optional<List<ProductModel>> productModelSet = comparisonDao.getProductsByComparisonPk(comparisonModelList.get(0).getPk().toString());
 			Set<ProductModel> productModelList = comparisonModelList.stream().findFirst().get().getProducts();
 			for (ProductModel productModel: productModelList)
 			{
 				addProductToSessionComparison(user, productModel);
 			}
-
-			return addProductToSessionComparison(user, product);
 		}
-		else
-		{
-			return createSessionComparison(user, product);
-		}
+		return createSessionComparison(user, product);*/
 	}
 
 	private ComparisonModel addProductToSessionComparison(UserModel user, ProductModel product)
@@ -119,6 +115,13 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		String sessionId = sessionService.getCurrentSession().getSessionId();
 		return sessionService.getOrLoadAttribute(SESSION_COMPARISON,
 				() -> comparisonFactory.createComparison(user, sessionId, product));
+	}
+
+	private ComparisonModel updateSessionComparison(UserModel user, Set<ProductModel> productModelSet)
+	{
+		String sessionId = sessionService.getCurrentSession().getSessionId();
+		return sessionService.getOrLoadAttribute(SESSION_COMPARISON,
+				() -> comparisonFactory.updateComparison(user, sessionId, productModelSet));
 	}
 
 	@Override
@@ -256,77 +259,52 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 	}
 
 	@Override
-	public void userChangeComparisonSession()
+	public void userChangeComparisonSession(String previousUserUid)
 	{
 		UserModel user = userService.getCurrentUser();
 		Session session = sessionService.getCurrentSession();
-		synchronized (session)
-		{
-			ComparisonModel comparisonModel = session.getAttribute(SESSION_COMPARISON);
-
-			Set<ProductModel> anonymousProducts = new HashSet<>();
-			if (comparisonModel != null)
-			{
-				if (comparisonModel.getProducts().size() != 0)
-				{
-					anonymousProducts = new HashSet<>(comparisonModel.getProducts());
-				}
-			}
-			else
-			{
-				comparisonModel = new ComparisonModel();
-			}
-
-			Set<ProductModel> userComparisonProductSet = new HashSet<>();
-			Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
-			if (userComparisonProducts.isPresent())
-			{
-				List<ComparisonModel> userComparisonProductList = userComparisonProducts.get();
-				userComparisonProductSet = (userComparisonProductList.size() == 0)
-						? new HashSet<>()
-						: mergeUserSessionComparison(user, anonymousProducts);
-			}
-
-			for (ProductModel productModel : userComparisonProductSet)
-			{
-				addProductToSessionComparison(user, productModel);
-			}
-			updateComparisonModel(comparisonModel, session, userComparisonProductSet, user );
+		synchronized (session) {
+				createComparisonSessionOnce(session, user);
 		}
 	}
-
-	private Set<ProductModel> mergeUserSessionComparison (UserModel user, Set<ProductModel> anonymousProducts)
-	{
-		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
-		Set<ProductModel> updateProducts = new HashSet<>();
-		ComparisonModel comparisonModel = new ComparisonModel();
-		if (userComparisonProducts.isPresent())
-		{
-			comparisonModel = userComparisonProducts.get().get(0);
-			if (comparisonModel != null)
-			{
-				updateProducts = (comparisonModel.getProducts().size() == 0) ? new HashSet<>()
-						: new HashSet<>(comparisonModel.getProducts()) ;
-			}
-
-		}
-		updateProducts.removeAll(anonymousProducts);
-		return updateProducts;
-	}
-
-	private Set<ProductModel> getProductsFromOptionalListComparison(Optional<List<ComparisonModel>> optionalListComparison )
+	private Set<ProductModel> getProductsFromUser( UserModel user)
 	{
 		Set<ProductModel> productModelSet = new HashSet<>();
-		if (optionalListComparison.isPresent())
-		{
-			if (optionalListComparison.get().size() != 0)
-			{
-				productModelSet = optionalListComparison.get().stream().findFirst().get().getProducts();
+		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
+		if (userComparisonProducts.isPresent()) {
+			Integer lastSizeNumber = userComparisonProducts.get().size()-1;
+			ComparisonModel comparisonModel = userComparisonProducts.get().get(lastSizeNumber);
+			if (comparisonModel != null) {
+				if (comparisonModel.getProducts().size() > 0) {
+					productModelSet = comparisonModel.getProducts();
+				}
 			}
+
 		}
 		return productModelSet;
 	}
 
+	private void createComparisonSessionOnce (Session session, UserModel user)
+	{
+		Set<ProductModel> productModelSet;
+		ComparisonModel comparisonModel = session.getAttribute(SESSION_COMPARISON);
+		if (comparisonModel == null) {
+			productModelSet = getProductsFromUser(user);
+			updateSessionComparison(user, productModelSet);
+		}
+		else
+		{
+			Set<ProductModel> anonymousProducts;
+			if (comparisonModel.getProducts().size() != 0)
+			{
+				anonymousProducts = new HashSet<>(comparisonModel.getProducts());
+				productModelSet = getProductsFromUser(user);
+				List<ProductModel> listAdd = new ArrayList<>(productModelSet);
+				listAdd.addAll(anonymousProducts);
+				updateSessionComparison(user, new HashSet<>(listAdd));
+			}
+		}
+	}
 
 	@Required
 	public void setSessionService(SessionService sessionService)
