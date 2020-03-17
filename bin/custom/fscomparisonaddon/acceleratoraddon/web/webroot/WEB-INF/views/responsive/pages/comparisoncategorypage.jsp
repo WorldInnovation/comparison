@@ -9,6 +9,7 @@
 <c:url value="/comparison/get" var="compareUrlGet"/>
 <c:url value="/comparison/delete" var="compareUrlCategoryDelete"/>
 <c:url value="/comparison/deleteProduct" var="compareUrlProductDelete"/>
+<c:url value="/comparisonstorefront/electronics/en/Brands/c/brands" var="compareUrlBrands"/>
 
 <%--<%@ taglib prefix="template" tagdir="/WEB-INF/tags/addons/fscomparisonaddon/responsive/template" %>--%>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/responsive/template"%>
@@ -19,7 +20,8 @@
         <table  class="zui-table" data-compare-url="${compareUrl}"
                 data-compare-url-get="${compareUrlGet}" data-compare-url-category-delete="${compareUrlCategoryDelete}"
                 data-compare-url-product-delete="${compareUrlProductDelete}"
-                data-compare-url-category-compare="${compareUrlCategoryCompare}">
+                data-compare-url-category-compare="${compareUrlCategoryCompare}"
+                data-compare-url-brands="${compareUrlBrands}">
             <caption>
                 <h3>${comparisonList}</h3>
             </caption>

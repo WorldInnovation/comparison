@@ -78,6 +78,7 @@ ACC.fscomparisonaddon = {
             const baseUrl = $("#comparisonTable").data('compare-url-product-delete');
             const idProductRemove = '#' + 'comparison-product-column-' +  comparisonProductRemove;
             const tableColumnId = $(idProductRemove).index() - 1;
+            const urlBrands = $("#comparisonTable").data('compare-url-brands');
 
             $.ajax({
                 url: baseUrl,
@@ -87,7 +88,8 @@ ACC.fscomparisonaddon = {
                 },
                 success: function (data) {
                     ACC.fscomparisonaddon.deleteColumnTable(idProductRemove,tableColumnId);
-                    ACC.fscomparisonaddon.getComparisonProduct();
+                    if(($("#comparisonTable td").length) === 0){ $(location).attr('href', urlBrands); }
+                    else{ACC.fscomparisonaddon.getComparisonProduct();}
                 }
 
             })
@@ -99,7 +101,6 @@ ACC.fscomparisonaddon = {
     deleteColumnTable: function (idProductRemove, tableColumnId) {
          const res = 'td:eq(' + tableColumnId + '),tr:eq(' + tableColumnId + ')';
         $('#comparisonTable tr').find(res).remove();
-       /* todo redirect to category page if($("#comparisonTable").is(":not(tr)"))*/
     },
 
     bindListenerToComparisonCategoryPage: function () {
@@ -109,6 +110,7 @@ ACC.fscomparisonaddon = {
         const baseUrl = $("table").data('compare-url-product-delete');
         const idProductRemove = '#' + 'comparison-product-column-' +  comparisonProductRemove;
         const tableColumnId = $(idProductRemove).index() - 1;
+        const urlBrands = $("table").data('compare-url-brands');
 
         $.ajax({
             url: baseUrl,
@@ -118,6 +120,7 @@ ACC.fscomparisonaddon = {
             },
             success: function (data) {
                 $(idProductRemove).remove();
+                if(($("table td").length) === 0){ $(location).attr('href', urlBrands); }
                 ACC.fscomparisonaddon.getComparisonProduct();
             }
 
