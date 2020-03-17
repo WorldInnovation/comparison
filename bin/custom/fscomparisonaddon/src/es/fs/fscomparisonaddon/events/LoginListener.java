@@ -11,21 +11,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginListener extends AbstractEventListener<AfterSessionUserChangeEvent>
 {
-	private AfterSessionUserChangeEvent afterSessionUserChangeEvent;
 	private ComparisonService comparisonService;
+	private String currentUser;
 
 	@Override
 	protected void onEvent(AfterSessionUserChangeEvent afterSessionUserChangeEvent)
 	{
-		if (this.afterSessionUserChangeEvent != null)
+		if (afterSessionUserChangeEvent != null)
 		{
-			if (!this.afterSessionUserChangeEvent.getSource().equals(afterSessionUserChangeEvent.getSource()))
+			if (currentUser == null)
 			{
-				comparisonService.userChangeComparisonSession(afterSessionUserChangeEvent.getPreviousUserUID());
+				currentUser = afterSessionUserChangeEvent.getPreviousUserUID();
 			}
+			currentUser = comparisonService.userChangeComparisonSession(currentUser);
 
 		}
-		this.afterSessionUserChangeEvent = afterSessionUserChangeEvent;
 	}
 
 	@Required

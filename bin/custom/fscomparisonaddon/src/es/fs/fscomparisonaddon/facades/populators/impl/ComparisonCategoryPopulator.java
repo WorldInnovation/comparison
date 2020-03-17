@@ -14,6 +14,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static es.fs.fscomparisonaddon.constants.ComparisonConstants.CATEGORY_TYPE_PRODUCT_SELECT;
+
 
 public class ComparisonCategoryPopulator
 		implements Populator<Set<ProductModel>, ComparisonData>
@@ -29,7 +31,7 @@ public class ComparisonCategoryPopulator
 				.collect(Collectors.toMap((productData) -> {
 					List<CategoryData> categoryDataList = new ArrayList<>(productData.getCategories());
 					return (!CollectionUtils.isEmpty(categoryDataList)) ?
-							categoryDataList.get(categoryDataList.size() - 1).getCode() :
+							categoryDataList.get(CATEGORY_TYPE_PRODUCT_SELECT).getCode() :
 							StringUtils.EMPTY;
 				}, (productData) -> {
 					ComparisonCategoryData comparisonCategoryData = new ComparisonCategoryData();
@@ -40,7 +42,7 @@ public class ComparisonCategoryPopulator
 					List<CategoryData> categoryDataList = new ArrayList<>(productData.getCategories());
 					if (!CollectionUtils.isEmpty(categoryDataList))
 					{
-						CategoryData category = categoryDataList.get(categoryDataList.size() - 1);
+						CategoryData category = categoryDataList.get(CATEGORY_TYPE_PRODUCT_SELECT);
 						comparisonCategoryData.setName(category.getName());
 						comparisonCategoryData.setCode(category.getCode());
 					}
@@ -53,36 +55,6 @@ public class ComparisonCategoryPopulator
 
 		comparisonData.setComparisonCategoriesData(new ArrayList<>(comparisonCategories.values()));
 
-		//		Set<ComparisonCategoryData> comparisonCategoryDataSet = new LinkedHashSet<>();
-		//		Map<String, ComparisonCategoryData> comparisonCategoryDataMap = new HashMap<>();
-		//		for (ProductData productData : productDataSet)
-		//		{
-		//			ComparisonCategoryData comparisonCategoryData = new ComparisonCategoryData();
-		//			if (!productData.getCategories().isEmpty())
-		//			{
-		//				List<CategoryData> categoryDataList = new ArrayList<>(productData.getCategories());
-		//				CategoryData categoryData = categoryDataList.get(categoryDataList.size() - 1);
-		//
-		//				Set<ProductData> productDataSetCategory = new LinkedHashSet<>();
-		//				if (comparisonCategoryDataMap.containsKey(categoryData.getCode()))
-		//				{
-		//					comparisonCategoryData = comparisonCategoryDataMap.get(categoryData.getCode());
-		//					productDataSetCategory.addAll(comparisonCategoryData.getProducts());
-		//				}
-		//				else
-		//				{
-		//					comparisonCategoryData.setCode(categoryData.getCode());
-		//					comparisonCategoryData.setName(categoryData.getName());
-		//				}
-		//				productDataSetCategory.add(productData);
-		//				comparisonCategoryData.setProducts(productDataSetCategory);
-		//
-		//				comparisonCategoryDataMap.put(categoryData.getCode(), comparisonCategoryData);
-		//			}
-		//
-		//			comparisonCategoryDataSet.add(comparisonCategoryData);
-		//		}
-		//		comparisonData.setComparisonCategoriesData(comparisonCategoryDataSet);
 	}
 
 	public void setComparisonProductConverter(

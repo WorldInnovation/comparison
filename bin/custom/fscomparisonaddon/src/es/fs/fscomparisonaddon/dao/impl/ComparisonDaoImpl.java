@@ -18,15 +18,24 @@ public class ComparisonDaoImpl implements ComparisonDao {
     private final static String GET_PRODUCTS_BY_COMPARISON_PK = "select {Product.pk}  from {Comparison}, {Product} , "
           + "{Comparison2Product as c2p} where {c2p.source} = {Comparison.pk} and {c2p.target} = {Product.pk} and {Comparison.pk}"
           + " =?comparisonPk";
+    private final static String GET_COMPARISON_BY_USER_UID = "SELECT {pk} FROM {Comparison } where {user} IN ({{" +
+            " SELECT {pk} FROM {User} where {uid}=?uid}})";
 
     private FlexibleSearchService flexibleSearchService;
 
     @Override
-    public Optional<List<ComparisonModel>> getByUser(UserModel user)
+    public Optional<List<ComparisonModel>> getByUser (UserModel user)
     {
-        String fsq = GET_COMPARISON_BY_USER;
-        FlexibleSearchQuery query = new FlexibleSearchQuery(fsq);
+        FlexibleSearchQuery query = new FlexibleSearchQuery(GET_COMPARISON_BY_USER);
         query.addQueryParameter("user", user);
+        SearchResult<ComparisonModel> result = flexibleSearchService.search(query);
+        return Optional.ofNullable(result.getResult());
+    }
+
+    @Override
+    public Optional<List<ComparisonModel>> getByUserUid(String userUid) {
+        FlexibleSearchQuery query = new FlexibleSearchQuery(GET_COMPARISON_BY_USER_UID);
+        query.addQueryParameter("uid", userUid);
         SearchResult<ComparisonModel> result = flexibleSearchService.search(query);
         return Optional.ofNullable(result.getResult());
     }
@@ -34,8 +43,7 @@ public class ComparisonDaoImpl implements ComparisonDao {
     @Override
     public Optional<List<ComparisonModel>> getBySessionId(String sessionId)
     {
-        String fsq = GET_COMPARISON_BY_USER_AND_PRODUCT;
-        FlexibleSearchQuery query = new FlexibleSearchQuery(fsq);
+        FlexibleSearchQuery query = new FlexibleSearchQuery(GET_COMPARISON_BY_USER_AND_PRODUCT);
         query.addQueryParameter("sessionId", sessionId);
         SearchResult<ComparisonModel> result = flexibleSearchService.search(query);
         return Optional.ofNullable(result.getResult());
@@ -44,8 +52,7 @@ public class ComparisonDaoImpl implements ComparisonDao {
     @Override
     public Optional<List<ProductModel>> getProductsByComparisonPk (String comparisonPk)
     {
-        String fsq = GET_PRODUCTS_BY_COMPARISON_PK;
-        FlexibleSearchQuery query = new FlexibleSearchQuery(fsq);
+        FlexibleSearchQuery query = new FlexibleSearchQuery(GET_PRODUCTS_BY_COMPARISON_PK);
         query.addQueryParameter("comparisonPk", comparisonPk);
         SearchResult<ProductModel> result = flexibleSearchService.search(query);
         return Optional.ofNullable(result.getResult());

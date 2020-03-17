@@ -99,6 +99,7 @@ ACC.fscomparisonaddon = {
     deleteColumnTable: function (idProductRemove, tableColumnId) {
          const res = 'td:eq(' + tableColumnId + '),tr:eq(' + tableColumnId + ')';
         $('#comparisonTable tr').find(res).remove();
+       /* todo redirect to category page if($("#comparisonTable").is(":not(tr)"))*/
     },
 
     bindListenerToComparisonCategoryPage: function () {
@@ -125,27 +126,5 @@ ACC.fscomparisonaddon = {
     });
 
 }
-
-    /*   onListenerComparisonCategoryCompare: function () {
-        *        $('#comparisonComponent').on('click', '.comparisonCategoryCompare' , function () {
-                     debugger;
-                     alert("turn off this event");
-                     const comparisonCategoryCode = $(this).data('compare-category-code');
-                     const baseUrl = $("#comparisonComponent").data('comp-url-category-compare');
-         /*            $.ajax({
-                         url: baseUrl,
-                         type: 'POST',
-                         data: {
-                             code: comparisonCategoryCode
-                         },
-                         success: function (data) {
-                             /!*ACC.fscomparisonaddon.getComparisonProduct();*!/
-                         }
-
-                     })
-
-          });
-      }*/
-
 
 };

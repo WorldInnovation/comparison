@@ -54,20 +54,6 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		Set<ProductModel> productModelSet = getProductsFromUser(user);
 		productModelSet.add(product);
 		return updateSessionComparison(user, productModelSet);
-/*		Optional<List<ComparisonModel>> userComparisonProducts = comparisonDao.getByUser(user);
-		if (userComparisonProducts.isPresent())
-		{
-			if(userComparisonProducts.get().size() == 0){
-				return createSessionComparison(user, product);
-			}
-			List<ComparisonModel> comparisonModelList = userComparisonProducts.get();
-			Set<ProductModel> productModelList = comparisonModelList.stream().findFirst().get().getProducts();
-			for (ProductModel productModel: productModelList)
-			{
-				addProductToSessionComparison(user, productModel);
-			}
-		}
-		return createSessionComparison(user, product);*/
 	}
 
 	private ComparisonModel addProductToSessionComparison(UserModel user, ProductModel product)
@@ -120,8 +106,9 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 	private ComparisonModel updateSessionComparison(UserModel user, Set<ProductModel> productModelSet)
 	{
 		String sessionId = sessionService.getCurrentSession().getSessionId();
-		return sessionService.getOrLoadAttribute(SESSION_COMPARISON,
-				() -> comparisonFactory.updateComparison(user, sessionId, productModelSet));
+		ComparisonModel comparisonModel = comparisonFactory.updateComparison(user, sessionId, productModelSet);
+		sessionService.setAttribute(SESSION_COMPARISON, comparisonModel);
+		return comparisonModel;
 	}
 
 	@Override
@@ -208,7 +195,7 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 		return comparisonModel.getProducts().stream()
 				.filter(productModel ->  {
 					List<CategoryModel> categoryDataList = new ArrayList<>(productModel.getSupercategories());
-					return (!CollectionUtils.isEmpty(categoryDataList)) && categoryDataList.get(categoryDataList.size() - 1)
+					return (!CollectionUtils.isEmpty(categoryDataList)) && categoryDataList.get(CATEGORY_TYPE_PRODUCT_SELECT)
 							.getCode().equals(categoryCode);
 				})
 				.collect(Collectors.toSet());
@@ -259,13 +246,23 @@ public class ComparisonServiceImpl implements ComparisonService, ComparisonConst
 	}
 
 	@Override
-	public void userChangeComparisonSession(String previousUserUid)
+	public String userChangeComparisonSession(String previousUserUid)
 	{
 		UserModel user = userService.getCurrentUser();
-		Session session = sessionService.getCurrentSession();
-		synchronized (session) {
-				createComparisonSessionOnce(session, user);
+	    if (!previousUserUid.equals(user.getName()))
+        {
+
+            Session session = sessionService.getCurrentSession();
+            synchronized (session) {
+                createComparisonSessionOnce(session, user);
+            }
+            return user.getName();
+        }
+        else
+        {
+	    	return ANONYMOUS_USER;
 		}
+
 	}
 	private Set<ProductModel> getProductsFromUser( UserModel user)
 	{
